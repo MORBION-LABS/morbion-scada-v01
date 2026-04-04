@@ -79,14 +79,24 @@ class ModbusClient:
                     raise ModbusError("Connection closed by remote host during header read")
                 header += chunk
 
-            # Read remaining response until connection closes
-            # Some PLCs send wrong length in MBAP, so we read until socket closes
+            # Read response - some PLCs send wrong length, so read until we have minimum
+            # Minimum response: FC(1) + byte_count(1) = 2 bytes
             payload = b''
-            while True:
-                chunk = s.recv(4096)
+            while len(payload) < 2:
+                chunk = s.recv(2 - len(payload))
+                if not chunk:
+                    raise ModbusError("Connection closed by remote host during payload read")
+                payload += chunk
+
+            # Get actual byte count and read remaining
+            byte_count = payload[1]
+            needed = byte_count - (len(payload) - 2)
+            while needed > 0:
+                chunk = s.recv(needed)
                 if not chunk:
                     break
                 payload += chunk
+                needed = byte_count - (len(payload) - 2)
 
             s.close()
             return header + payload
