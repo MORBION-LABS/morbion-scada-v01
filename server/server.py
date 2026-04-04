@@ -52,6 +52,7 @@ def init_server(state: PlantState, plc_host: str) -> None:
 
 def broadcast(payload: str) -> None:
     """Push payload string to all connected WebSocket clients."""
+    global _ws_clients
     dead = set()
     with _ws_lock:
         for ws in list(_ws_clients):
