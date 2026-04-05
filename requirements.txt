@@ -1,0 +1,5 @@
+# MORBION Processes - Requirements
+# Required Python packages for manager, installer, uninstaller
+
+pyyaml>=6.0
+psutil>=5.9.0

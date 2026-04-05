@@ -1,0 +1,9 @@
+{
+  "hot_pump_speed_rpm": 1199.9607224965803,
+  "cold_pump_speed_rpm": 1099.9639956218646,
+  "hot_valve_position_pct": 0.0,
+  "cold_valve_position_pct": 0.0,
+  "T_hot_in": 180.0,
+  "T_cold_in": 25.0,
+  "fault_code": 0
+}
