@@ -123,6 +123,7 @@ morbion_processes/
 ├── manager.py             # Central manager (OOP)
 ├── installer.py           # Installer (OOP)
 ├── uninstaller.py         # Uninstaller (OOP)
+├── test_communication.py  # CLI test/monitor tool
 └── requirements.txt       # Dependencies
 ```
 
