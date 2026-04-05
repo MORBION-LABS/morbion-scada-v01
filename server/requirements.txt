@@ -1,0 +1,4 @@
+flask>=3.0
+flask-cors>=4.0
+flask-sock>=0.7
+influxdb-client>=1.40   # optional — only needed if influxdb.enabled = true
