@@ -170,9 +170,9 @@ morbion_processes/
 ├── pipeline/              # Process 4
 ├── logs/                  # Created by installer
 ├── config.yaml            # Central config
-├── manager.py             # Central manager (OOP)
-├── installer.py           # Installer (OOP)
-├── uninstaller.py         # Uninstaller (OOP)
+├── manager.py             # Central manager 
+├── installer.py           # Installer 
+├── uninstaller.py         # Uninstaller 
 ├── test_communication.py  # CLI monitor tool
 └── requirements.txt       # Dependencies
 ```
