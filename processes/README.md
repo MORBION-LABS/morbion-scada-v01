@@ -6,10 +6,10 @@ MORBION Virtual ICS Lab - 4 Industrial Processes with Central Manager
 
 | Process | Port | Description |
 |---------|------|-------------|
-| Pumping Station | 502 | Nairobi Water Municipal Pumping Station |
-| Heat Exchanger | 506 | KenGen Olkaria Geothermal Heat Recovery |
-| Boiler | 507 | EABL/Bidco Industrial Steam Generation |
-| Pipeline | 508 | Kenya Pipeline Co. Petroleum Transfer |
+| Pumping Station | 502 | Nairobi Water Municipal Pumping Station Simulation |
+| Heat Exchanger | 506 | KenGen Olkaria Geothermal Heat Recovery Simulation|
+| Boiler | 507 | EABL/Bidco Industrial Steam Generation Simulation|
+| Pipeline | 508 | Kenya Pipeline Co. Petroleum Transfer Simulation|
 
 ## Quick Start
 
@@ -110,9 +110,24 @@ Edit `config.yaml` to change:
 - PyYAML
 - psutil
 
+### Installation Options
+
 ```bash
+# Option 1: pip (may need --break-system-packages)
+pip install pyyaml psutil
+
+# Option 2: apt (recommended for system Python)
+sudo apt install python3-psutil python3-yaml
+
+# Option 3: virtual environment (best practice)
+python3 -m venv venv
+source venv/bin/activate
 pip install pyyaml psutil
 ```
+
+If you get "externally-managed-environment" error, either:
+- Use `--break-system-packages`: `sudo pip3 install psutil --break-system-packages`
+- Or use apt: `sudo apt install python3-psutil python3-yaml`
 
 ## Troubleshooting
 
@@ -164,4 +179,4 @@ morbion_processes/
 
 ## License
 
-MORBION Virtual ICS Lab - Industrial Control System Simulation
+MORBION Virtual Process - Industrial Control System Process Simulation
