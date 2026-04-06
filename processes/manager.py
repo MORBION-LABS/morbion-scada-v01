@@ -36,7 +36,13 @@ class Process:
 
     def start(self, log_dir: str) -> bool:
         """Start the process."""
-        if self.running:
+        # Check if already running (scan by port)
+        existing_pid = self.find_by_port()
+        if existing_pid:
+            print(f"[{self.name}] Already running on port {self.port} (PID: {existing_pid})")
+            return True
+
+        if self.running and self.process:
             print(f"[{self.name}] Already running on port {self.port}")
             return True
 
@@ -67,29 +73,49 @@ class Process:
 
     def stop(self) -> bool:
         """Stop the process gracefully."""
-        if not self.running or self.process is None:
-            print(f"[{self.name}] Not running")
-            return True
-
-        try:
-            self.process.terminate()
+        if self.running and self.process is not None:
             try:
-                self.process.wait(timeout=5)
-            except subprocess.TimeoutExpired:
-                self.process.kill()
-                self.process.wait()
+                self.process.terminate()
+                try:
+                    self.process.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    self.process.kill()
+                    self.process.wait()
 
-            if self.log_file:
-                self.log_file.close()
-                self.log_file = None
+                if self.log_file:
+                    self.log_file.close()
+                    self.log_file = None
 
-            self.running = False
-            self.process = None
-            print(f"[{self.name}] Stopped")
-            return True
-        except Exception as e:
-            print(f"[{self.name}] ERROR stopping: {e}")
-            return False
+                self.running = False
+                self.process = None
+                print(f"[{self.name}] Stopped")
+                return True
+            except Exception as e:
+                print(f"[{self.name}] ERROR stopping: {e}")
+                return False
+
+        # Fallback: scan for process by port
+        found_pid = self.find_by_port()
+        if found_pid:
+            try:
+                import signal
+                os.kill(found_pid, signal.SIGTERM)
+                time.sleep(1)
+                try:
+                    import psutil
+                    p = psutil.Process(found_pid)
+                    p.terminate()
+                    p.wait(timeout=5)
+                except:
+                    pass
+                print(f"[{self.name}] Stopped (found by port scan)")
+                return True
+            except Exception as e:
+                print(f"[{self.name}] ERROR stopping: {e}")
+                return False
+
+        print(f"[{self.name}] Not running")
+        return True
 
     def is_running(self) -> bool:
         """Check if process is running - ALWAYS check system state."""
@@ -101,13 +127,32 @@ class Process:
         except:
             return False
 
+    def find_by_port(self) -> Optional[int]:
+        """Find process PID by port - scans system for processes listening on port."""
+        try:
+            import psutil
+            for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+                try:
+                    cmdline = proc.info.get('cmdline') or []
+                    if 'main.py' in ' '.join(cmdline):
+                        connections = proc.net_connections()
+                        for conn in connections:
+                            if conn.laddr.port == self.port:
+                                return proc.info['pid']
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    continue
+            return None
+        except:
+            return None
+
     def get_status(self) -> Dict:
         """Get process status."""
+        actual_pid = self.process.pid if self.process else (self.find_by_port() if self.running else None)
         return {
             "name": self.name,
             "port": self.port,
-            "running": self.is_running(),
-            "pid": self.process.pid if self.process else None,
+            "running": self.running or self.find_by_port() is not None,
+            "pid": actual_pid,
             "folder": self.folder
         }
 
@@ -136,7 +181,7 @@ class ProcessManager:
         self.config = config
         self.processes: Dict[str, Process] = {}
         self._load_processes()
-        self._load_saved_pids()
+        self._scan_by_port()
 
     def _load_processes(self) -> None:
         """Load processes from config."""
@@ -155,32 +200,17 @@ class ProcessManager:
     def _get_pid_file(self) -> str:
         return os.path.join(self.base_path, ".process_pids.json")
 
-    def _load_saved_pids(self) -> None:
-        """Load previously saved PIDs if processes are still running."""
-        import json
-        pid_file = self._get_pid_file()
-        if not os.path.exists(pid_file):
-            return
-        try:
-            with open(pid_file, "r") as f:
-                saved_pids = json.load(f)
-            import psutil
-            for key, pid in saved_pids.items():
-                if key in self.processes and psutil.pid_exists(pid):
-                    self.processes[key].process = psutil.Process(pid)
-                    self.processes[key].running = True
-        except Exception:
-            pass
-
-    def _save_pids(self) -> None:
-        """Save running process PIDs to file."""
-        import json
-        pids = {}
+    def _scan_by_port(self) -> None:
+        """Scan for running processes by port."""
+        import psutil
         for key, proc in self.processes.items():
-            if proc.process and proc.is_running():
-                pids[key] = proc.process.pid
-        with open(self._get_pid_file(), "w") as f:
-            json.dump(pids, f)
+            found_pid = proc.find_by_port()
+            if found_pid:
+                try:
+                    proc.process = psutil.Process(found_pid)
+                    proc.running = True
+                except:
+                    pass
 
     def start_all(self) -> bool:
         """Start all enabled processes."""
@@ -197,7 +227,6 @@ class ProcessManager:
                 success = False
             time.sleep(0.5)
 
-        self._save_pids()
         print("=" * 50)
         return success
 
