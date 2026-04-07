@@ -25,24 +25,24 @@ consequences. Alarms fire because physical limits are breached.
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    MORBION ICS LAB NETWORK                      │
-│                      192.168.100.0/24                           │
-│                                                                  │
-│   UBUNTU-PLC  192.168.100.20                                    │
+│                      NETWORK ADDRESS                            │
+│                                                                 │
+│   PLC VIRTUAL MACHINE  (VIRTUAL MACHINE IP)                     │
 │   ├── pumping_station  port 502   Nairobi Water                 │
 │   ├── heat_exchanger   port 506   KenGen Olkaria                │
 │   ├── boiler           port 507   EABL/Bidco                    │
 │   └── pipeline         port 508   Kenya Pipeline Company        │
-│                             │                                    │
-│                             ▼  Modbus TCP                        │
-│   UBUNTU-SCADA  192.168.100.30                                  │
+│                             │                                   │
+│                             ▼  Modbus TCP                       │
+│   SCADA SERVER VIRTUAL MACHINE (VIRTUAL MACHINE IP)             │
 │   ├── MORBION SCADA Server  port 5000  (REST + WebSocket)       │
 │   ├── InfluxDB historian    port 8086                           │
 │   ├── Grafana dashboards    port 3000                           │
 │   ├── RapidSCADA            port 10008                          │
 │   └── Mosquitto MQTT        port 1883                           │
-│                             │                                    │
-│                             ▼  WebSocket / REST                  │
-│   HOST-ENG  192.168.100.10                                      │
+│                             │                                   │
+│                             ▼  WebSocket / REST                 │
+│   SCADA CLIENT VIRTUAL MACHINE (VIRTUAL MACHINE IP)             │
 │   └── MORBION SCADA Desktop Client  (PyQt6)                     │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -76,7 +76,7 @@ real alarm limits, and real fault injection and recovery capability.
 
 ## Quick Start
 
-### 1. Start the Processes (UBUNTU-PLC)
+### 1. Start the Processes 
 
 ```bash
 cd processes
@@ -84,7 +84,7 @@ sudo python3 manager.py start
 sudo python3 manager.py status
 ```
 
-### 2. Start the SCADA Server (UBUNTU-SCADA)
+### 2. Start the SCADA Server
 
 ```bash
 cd server
@@ -109,7 +109,7 @@ ss -tlnp | grep -E ':(502|506|507|508) '
 
 ## Reading Live Data
 
-Works from any machine on the 192.168.100.0/24 network:
+Works from any machine on the  network:
 
 ```python
 import socket, struct
@@ -126,7 +126,7 @@ def read(host, port, start, count):
     return list(struct.unpack(f'>{count}H', resp[9:9+count*2]))
 
 # Read heat exchanger — 17 registers
-regs = read('192.168.100.20', 506, 0, 17)
+regs = read('PLC VM IP', 506, 0, 17)
 print(regs)
 ```
 
@@ -136,10 +136,10 @@ print(regs)
 
 | Service | URL | Credentials |
 |---|---|---|
-| Grafana | http://192.168.100.30:3000 | admin / admin |
-| InfluxDB | http://192.168.100.30:8086 | admin / admin123 |
-| RapidSCADA | http://192.168.100.30:10008 | admin / scada |
-| SCADA Server | http://192.168.100.30:5000/data | — |
+| Grafana | http://SCADA SERVER VM IP:3000 | admin / admin |
+| InfluxDB | http://SCADA SERVER VM IP:8086 | admin / admin123 |
+| RapidSCADA | http://SCADA SERVER VM IP:10008 | admin / scada |
+| SCADA Server | http://SCADA SERVER VM IP:5000/data | — |
 
 ---
 
