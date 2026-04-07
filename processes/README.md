@@ -195,20 +195,20 @@ def write(host, port, reg_index, value):
     s.close()
 
 # Heat Exchanger — inject OVERTEMP
-write('192.168.100.20', 506, 3, 1000)   # T_cold_out = 100°C
-write('192.168.100.20', 506, 16, 0)     # Clear fault
+write('PLC MACHINE IP', 506, 3, 1000)   # T_cold_out = 100°C
+write('PLC MACHINE IP', 506, 16, 0)     # Clear fault
 
 # Boiler — trip on low water
-write('192.168.100.20', 507, 2, 150)    # drum_level = 15%
-write('192.168.100.20', 507, 14, 0)     # Clear fault
+write('PLC MACHINE IP', 507, 2, 150)    # drum_level = 15%
+write('PLC MACHINE IP', 507, 14, 0)     # Clear fault
 
 # Pumping Station — high level alarm
-write('192.168.100.20', 502, 0, 920)    # tank_level = 92%
-write('192.168.100.20', 502, 14, 0)     # Clear fault
+write('PLC MACHINE IP', 502, 0, 920)    # tank_level = 92%
+write('PLC MACHINE IP', 502, 14, 0)     # Clear fault
 
 # Pipeline — outlet overpressure
-write('192.168.100.20', 508, 1, 5600)   # outlet = 56 bar
-write('192.168.100.20', 508, 14, 0)     # Clear fault
+write('PLC MACHINE IP', 508, 1, 5600)   # outlet = 56 bar
+write('PLC MACHINE IP', 508, 14, 0)     # Clear fault
 ```
 
 ---
