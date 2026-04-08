@@ -1,6 +1,6 @@
 {
   "server": {
-    "host": "192.168.100.30",
+    "host": "PLC Machine IP",
     "port": 5000
   },
   "ui": {
