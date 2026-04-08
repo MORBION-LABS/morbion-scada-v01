@@ -101,8 +101,8 @@ def main() -> None:
         daemon  = True,
     ).start()
 
-    print(f"  REST        : http://SERVER MACHINE IP:{config['server_port']}/data")
-    print(f"  WebSocket   : ws://SERVER MACHINE IP:{config['server_port']}/ws")
+    print(f"  REST        : http://{config[]}:{config['server_port']}/data")
+    print(f"  WebSocket   : ws://{config[]}:{config['server_port']}/ws")
     print(f"  Control     : POST /control")
     print("━" * 64)
 
