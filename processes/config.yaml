@@ -34,3 +34,5 @@ settings:
   scan_interval_ms: 100
   auto_restart_on_failure: false
   log_lines: 50
+  plc_host: ""
+  server_host: ""
