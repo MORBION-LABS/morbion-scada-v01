@@ -149,13 +149,23 @@ def monitor(
     once: bool = typer.Option(False, "--once", "-1", help="Run once and exit"),
 ):
     """Real-time MORBION process monitor."""
-    processes = [
-        ("Pumping Station", "127.0.0.1", 502),
-        ("Heat Exchanger", "127.0.0.1", 506),
-        ("Boiler", "127.0.0.1", 507),
-        ("Pipeline", "127.0.0.1", 508),
-    ]
+    # NEW (read from config):
+    def load_config():
+        config_path = os.path.join(os.path.dirname(__file__), "config.yaml")
+        with open(config_path) as f:
+            import yaml
+            return yaml.safe_load(f)
     
+    config = load_config()
+    plc_host = config.get("settings", {}).get("plc_host", "127.0.0.1")
+
+    processes = [
+        ("Pumping Station", plc_host, 502),
+        ("Heat Exchanger", plc_host, 506),
+        ("Boiler", plc_host, 507),
+        ("Pipeline", plc_host, 508),
+    ]
+        
     console.print(Panel.fit(
         Text("MORBION Process Monitor", justify="center", style="bold cyan"),
         border_style="cyan"
@@ -184,13 +194,22 @@ def monitor(
 @app.command()
 def status():
     """Show current status of all processes."""
-    processes = [
-        ("Pumping Station", "127.0.0.1", 502),
-        ("Heat Exchanger", "127.0.0.1", 506),
-        ("Boiler", "127.0.0.1", 507),
-        ("Pipeline", "127.0.0.1", 508),
-    ]
+    # NEW (read from config):
+    def load_config():
+        config_path = os.path.join(os.path.dirname(__file__), "config.yaml")
+        with open(config_path) as f:
+            import yaml
+            return yaml.safe_load(f)
     
+    config = load_config()
+    plc_host = config.get("settings", {}).get("plc_host", "127.0.0.1")
+    
+    processes = [
+        ("Pumping Station", plc_host, 502),
+        ("Heat Exchanger", plc_host, 506),
+        ("Boiler", plc_host, 507),
+        ("Pipeline", plc_host, 508),
+    ]
     console.print("\n[bold cyan]MORBION Process Status[/bold cyan]\n")
     
     for name, host, port in processes:
@@ -206,13 +225,22 @@ def status():
 @app.command()
 def test():
     """Test connectivity to all processes."""
-    processes = [
-        ("Pumping Station", "127.0.0.1", 502),
-        ("Heat Exchanger", "127.0.0.1", 506),
-        ("Boiler", "127.0.0.1", 507),
-        ("Pipeline", "127.0.0.1", 508),
-    ]
+   # NEW (read from config):
+    def load_config():
+        config_path = os.path.join(os.path.dirname(__file__), "config.yaml")
+        with open(config_path) as f:
+            import yaml
+            return yaml.safe_load(f)
     
+    config = load_config()
+    plc_host = config.get("settings", {}).get("plc_host", "127.0.0.1")
+    
+    processes = [
+        ("Pumping Station", plc_host, 502),
+        ("Heat Exchanger", plc_host, 506),
+        ("Boiler", plc_host, 507),
+        ("Pipeline", plc_host, 508),
+    ]
     console.print("\n[bold cyan]Testing MORBION Process Connectivity[/bold cyan]\n")
     
     all_ok = True
