@@ -269,36 +269,43 @@ class Installer:
         print("=" * 50)
         return success
 
-    def run(self, install_services: bool = False) -> bool:
-        """Run full installation."""
-        print("\n" + "=" * 60)
+    def run(self) -> None:
+        """Run installation."""
+        print("\n" + "=" * 50)
         print("  MORBION Processes Installer")
-        print(f"  Detected OS: {self.os_type}")
-        print("=" * 60)
+        print("=" * 50)
 
-        steps = [
-            ("Creating logs directory", self.create_logs_dir),
-            ("Creating config file", self.create_config),
-        ]
+        # Get PLC Host IP
+        plc_host = input("Enter PLC Host IP: ").strip()
+        if not plc_host:
+            print("[-] Error: PLC Host IP is required")
+            return
 
-        success = True
-        for step_name, step_func in steps:
-            print(f"\n[Installer] {step_name}...")
-            if not step_func():
-                success = False
+        # Get Server Host IP
+        server_host = input("Enter SCADA Server Host IP: ").strip()
+        if not server_host:
+            print("[-] Error: Server Host IP is required")
+            return
 
-        if install_services and success:
-            self.install_services()
+        # Load existing config
+        config = self.config_manager.load()
+        if "settings" not in config:
+            config["settings"] = {}
 
-        print("\n" + "=" * 60)
-        if success:
-            print("  Installation complete!")
-            print("  Run: python manager.py start")
-        else:
-            print("  Installation completed with errors")
-        print("=" * 60)
+        # Update with user input
+        config["settings"]["plc_host"] = plc_host
+        config["settings"]["server_host"] = server_host
 
-        return success
+        # Save
+        self.config_manager.save(config)
+
+        self.create_logs_directory()
+
+        print("\n[+] Installation complete!")
+        print("    Logs directory:", self.log_dir)
+        print("    Config file:", self.config_path)
+        print(f"    PLC Host: {plc_host}")
+        print(f"    Server Host: {server_host}")
 
 
 def main():
