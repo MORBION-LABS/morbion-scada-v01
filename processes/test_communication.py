@@ -3,6 +3,8 @@ Real-time MORBION Process Monitor
 CLI tool using Typer and Rich for beautiful terminal UI.
 """
 
+import os
+import sys
 import socket
 import struct
 import time
@@ -16,6 +18,15 @@ from rich.live import Live
 from rich.layout import Layout
 from rich.panel import Panel
 from rich.text import Text
+
+# ADD THIS FUNCTION AFTER IMPORTS:
+def get_plc_host():
+    """Load PLC host IP from config.yaml"""
+    import yaml
+    config_path = os.path.join(os.path.dirname(__file__), "config.yaml")
+    with open(config_path, "r") as f:
+        config = yaml.safe_load(f)
+    return config.get("settings", {}).get("plc_host", "127.0.0.1")
 
 app = typer.Typer(help="MORBION Process Monitor - Real-time Modbus TCP client")
 console = Console()
