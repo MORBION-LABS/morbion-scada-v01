@@ -4,7 +4,7 @@
 
 A complete virtual Industrial Control System lab — four running industrial
 processes, a production SCADA server, and a real-time desktop client.
-Built from scratch. No shortcuts.
+Built from scratch. 
 
 ---
 
@@ -14,9 +14,6 @@ MORBION SCADA v01 is a fully operational virtual ICS lab modelling four
 real Kenyan industrial facilities. Every process runs real physics, real
 PLC logic, real alarm evaluation, and real Modbus TCP communication.
 
-This is not a simulation framework. It is operational OT infrastructure.
-Code here controls running processes. Register writes have physical
-consequences. Alarms fire because physical limits are breached.
 
 ---
 
@@ -90,7 +87,7 @@ This guide covers three ways to clone and set up the MORBION SCADA v01 repositor
 | Requirement | Description |
 |---|---|
 | Python | 3.8 or higher |
-| Network | 192.168.100.0/24 subnet (VMware VMnet1) |
+| Network | 'NETWORK ADDRESS'/24 subnet (VMware VMnet1) |
 | Git | Installed on your machine |
 | sudo/Admin | Required for privileged ports (< 1024) |
 
