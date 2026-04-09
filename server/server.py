@@ -21,7 +21,7 @@ sock = Sock(app)
 
 # Module-level refs — set by init_server()
 _state:    PlantState = None
-_plc_host: str        = "192.168.100.20"
+_plc_host: str        = ""
 
 # WebSocket client registry
 _ws_clients: set            = set()

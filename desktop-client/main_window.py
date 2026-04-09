@@ -176,8 +176,14 @@ class MorbionMainWindow(QMainWindow):
             self._bg_pixmap = QPixmap(bg_path)
         self._bg_opacity = ui.get("background_opacity", 0.08)
 
+        # Check server host is configured
+        host = srv.get("host", "")
+        if not host:
+            print("ERROR: server.host not configured in config.json")
+            sys.exit(1)
+
         # ── REST client ───────────────────────────────────────────────────────
-        self._rest = RestClient(srv.get("host", "192.168.100.30"),
+        self._rest = RestClient(host,
                                 srv.get("port", 5000))
 
         # ── Central widget ────────────────────────────────────────────────────
@@ -219,7 +225,7 @@ class MorbionMainWindow(QMainWindow):
 
         # ── WebSocket thread ──────────────────────────────────────────────────
         self._ws = WSThread(
-            host   = srv.get("host", "192.168.100.30"),
+            host   = host,
             port   = srv.get("port", 5000),
             parent = self,
         )
