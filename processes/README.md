@@ -215,7 +215,10 @@ write('PLC MACHINE IP', 508, 14, 0)     # Clear fault
 
 ## Physics
 
-**Pumping Station:** `Q_pump × dt = ΔV_tank + Q_demand × dt`
+**Pumping Station:** 
+'''
+Q_pump × dt = ΔV_tank + Q_demand × dt
+'''
 
 **Heat Exchanger:**
 
