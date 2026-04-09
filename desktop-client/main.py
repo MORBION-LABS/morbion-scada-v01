@@ -32,7 +32,7 @@ def load_config(path: str) -> dict:
     except FileNotFoundError:
         print(f"Config not found: {path} — using defaults")
         return {
-            "server": {"host": , "port": host5000},
+            "server": {"host": host, "port": 5000},
             "ui":     {
                 "window_title":           "MORBION SCADA v3.0",
                 "window_width":           1600,
