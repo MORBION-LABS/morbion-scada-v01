@@ -312,14 +312,10 @@ def main():
     """Main entry point."""
     base_path = os.path.dirname(os.path.abspath(__file__))
 
-    install_services = False
-    if len(sys.argv) > 1 and sys.argv[1] == "--services":
-        install_services = True
-
     installer = Installer(base_path)
-    success = installer.run(install_services=install_services)
+    installer.run()
 
-    sys.exit(0 if success else 1)
+    sys.exit(0)
 
 
 if __name__ == "__main__":

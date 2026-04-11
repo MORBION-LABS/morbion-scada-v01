@@ -29,6 +29,7 @@ process_name/
 ├── process_state.json  Persistence — save on stop, restore on start
 ├── config.json         All parameters — never hardcoded
 ├── main.py             Orchestrator — scan loop, shutdown handler
+├── installer.py        
 ├── start.sh            setsid launch + log attach
 └── stop.sh             pkill by name + port verification
 ```
