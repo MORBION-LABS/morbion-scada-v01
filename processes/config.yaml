@@ -1,38 +1,32 @@
-# MORBION Processes - Central Config
-
 processes:
-  pumping_station:
-    name: "Pumping Station"
-    description: "Nairobi Water Municipal Pumping Station"
-    port: 502
-    enabled: true
-    folder: "pumping_station"
-
-  heat_exchanger:
-    name: "Heat Exchanger"
-    description: "KenGen Olkaria Geothermal Heat Recovery"
-    port: 506
-    enabled: true
-    folder: "heat_exchanger"
-
   boiler:
-    name: "Boiler"
-    description: "EABL/Bidco Industrial Steam Generation"
+    description: EABL/Bidco Industrial Steam Generation
+    enabled: true
+    folder: boiler
+    name: Boiler
     port: 507
+  heat_exchanger:
+    description: KenGen Olkaria Geothermal Heat Recovery
     enabled: true
-    folder: "boiler"
-
+    folder: heat_exchanger
+    name: Heat Exchanger
+    port: 506
   pipeline:
-    name: "Pipeline"
-    description: "Kenya Pipeline Co. Petroleum Transfer"
-    port: 508
+    description: Kenya Pipeline Co. Petroleum Transfer
     enabled: true
-    folder: "pipeline"
-
+    folder: pipeline
+    name: Pipeline
+    port: 508
+  pumping_station:
+    description: Nairobi Water Municipal Pumping Station
+    enabled: true
+    folder: pumping_station
+    name: Pumping Station
+    port: 502
 settings:
-  log_dir: "logs"
-  scan_interval_ms: 100
   auto_restart_on_failure: false
+  log_dir: logs
   log_lines: 50
-  plc_host: ""
-  server_host: ""
+  plc_host: 192.168.100.10
+  scan_interval_ms: 100
+  server_host: 192.168.100.30

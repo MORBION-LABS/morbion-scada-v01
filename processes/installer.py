@@ -302,8 +302,8 @@ class Installer:
         self.create_logs_dir()
 
         print("\n[+] Installation complete!")
-        print("    Logs directory:", self.log_dir)
-        print("    Config file:", self.config_path)
+        print("    Logs directory: logs/")
+        print("    Config file: config.yaml")
         print(f"    PLC Host: {plc_host}")
         print(f"    Server Host: {server_host}")
 
