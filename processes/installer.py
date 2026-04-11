@@ -299,7 +299,7 @@ class Installer:
         # Save
         self.config_manager.save(config)
 
-        self.create_logs_directory()
+        self.create_logs_dir()
 
         print("\n[+] Installation complete!")
         print("    Logs directory:", self.log_dir)
